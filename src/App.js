@@ -1,23 +1,27 @@
-import logo from './logo.svg';
+import { NextUIProvider } from "@nextui-org/react"
 import './App.css';
+import { Suspense, lazy } from "react"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import Navbar from "./components/Navbar";
+import Loader from "./components/Loader";
+
+const Product = lazy(() => import("./components/Product"))
+const Cart = lazy(() => import("./components/Cart"))
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <NextUIProvider>
+        <Navbar />
+        <Router>
+          <Suspense fallback={<Loader />}>
+            <Routes>
+              <Route path="/" element={<Product />} />
+              <Route path="/cart" element={<Cart />} />
+            </Routes>
+          </Suspense>
+        </Router>
+      </NextUIProvider>
     </div>
   );
 }
